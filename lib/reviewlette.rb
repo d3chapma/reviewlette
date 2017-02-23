@@ -11,7 +11,6 @@ class Reviewlette
 
   def run
     comment_for_review
-    comment_for_test
   end
 
   def comment_for_review
