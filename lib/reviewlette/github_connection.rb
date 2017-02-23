@@ -13,6 +13,16 @@ class Reviewlette
       @client.pull_requests(@repo)
     end
 
+    def trello_card(issue)
+      comments = @client.issue_comments(@repo, issue.number)
+      comment = comments.detect do |c|
+        c[:body].match(/trello\.com/)
+      end
+
+      _, trello_card = comment[:body].match(/https:\/\/trello.com\/c\/\w+\/(\d+)-/).to_a
+      trello_card.to_i
+    end
+
     def labels(issue)
       @client.labels_for_issue(@repo, issue).map(&:name)
     end

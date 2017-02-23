@@ -6,24 +6,17 @@ class Reviewlette
 
     attr_accessor :board
 
-    def initialize(config = nil)
-      config ||= YAML.load_file("#{File.dirname(__FILE__)}/../../config/trello.yml")
+    def initialize
       Trello.configure do |conf|
-        conf.developer_public_key = config['consumerkey']
-        conf.member_token = config['oauthtoken']
+        conf.developer_public_key = ENV['TRELLO_KEY']
+        conf.member_token = ENV['TRELLO_TOKEN']
       end
-      @board = Trello::Board.find(config['board_id'])
+      @board = Trello::Board.find(ENV['TRELLO_BOARD_ID'])
     end
 
     def add_reviewer_to_card(reviewer, card)
       reviewer = find_member_by_username(reviewer)
       card.add_member(reviewer)
-    end
-
-    def comment_reviewers(card, repo_name, issue_id, reviewers)
-      comment = reviewers.map { |r| "@#{r.trello_handle}" }.join(' and ')
-      comment += " will review https://github.com/#{repo_name}/issues/#{issue_id}"
-      card.add_comment(comment)
     end
 
     def move_card_to_list(card, column_name)
@@ -37,6 +30,10 @@ class Reviewlette
 
     def find_member_by_username(username)
       @board.members.find { |m| m.username == username }
+    end
+
+    def find_label(label_name)
+      @board.labels.find { |x| x.name == label_name }
     end
 
     def find_card_by_id(id)
