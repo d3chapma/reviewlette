@@ -1,7 +1,3 @@
-require 'rspec/core/rake_task'
-
-RSpec::Core::RakeTask.new(:spec)
-
 task :default => :spec
 
 desc 'Run console loaded with gem'
@@ -40,7 +36,6 @@ TESTERS = [
 
 desc 'Run task to check all PRs for reviewers'
 task :check do
-  require 'byebug'
   $LOAD_PATH.unshift File.join(File.dirname(__FILE__), 'lib')
   require 'reviewlette'
 

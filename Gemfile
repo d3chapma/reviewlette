@@ -2,11 +2,12 @@ source 'http://rubygems.org'
 
 gemspec
 
+gem 'rake'
+
 group :development, :test do
   gem 'ap'
-  gem 'rake'
-  gem 'debugger-linecache'
   gem 'byebug'
+  gem 'debugger-linecache'
 end
 
 group :test do
